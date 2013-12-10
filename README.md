@@ -1,4 +1,4 @@
 spell_check
 ===========
 
-Python powered spell checked with variable stack depth
+Python powered spell checker with variable stack depth
