@@ -16,7 +16,7 @@ def train(words):
         model[word] += 1
     return model
 
-dataset = words(file('dataset').read())
+dataset = words(open('dataset').read())
 wordDict = train(dataset)
  # dict, with a score of every word, any word not contained will
  # have a score of 1.
@@ -68,13 +68,25 @@ def recursiveEdits(word, levels):
             words += edits(word)
         return words
     
-
+def maxScore(candidates):
+    highScore = ""
+    for word in candidates:
+        if not (wordDict.get(highScore) == None or wordDict.get(word) == None):
+            if wordDict.get(word) > wordDict.get(highScore):
+                highScore = word
+        elif wordDict.get(word) == None:
+            continue
+        else:
+            highScore = word
+    return highScore
 
 def correct(word, depth):
+    # if word is know, return word
+    if (list(word for word in [word] if word in wordDict)) != []:
+        return word
     candidates = [word]
-    
     for i in range(1, depth + 1):
         candidates += list(set(word for word in recursiveEdits(word, i) if word in wordDict)) # nonrepeating list
     candidates += list(set(word for word in [word] if word in wordDict)) # level 0
     candidates = set(candidates)
-    return max(candidates, key=wordDict.get) # checks which candidate has the highest score, based on the key
+    return maxScore(candidates) # checks which candidate has the highest score, based on the key
